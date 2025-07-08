@@ -1,7 +1,8 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, Routes, Route } from 'react-router-dom';
 import './App.css'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
+import AllRooms from './pages/AllRooms'
 import Footer from './components/Footer'
 
 
@@ -11,7 +12,10 @@ function App() {
   return (
     <div>
       {!isOwnerPath && <Navbar />}
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/rooms" element={<AllRooms />} />
+      </Routes>
       <Footer />
     </div>
   )

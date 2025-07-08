@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { assets } from '../assets/assets';
 
 interface NavLink {
@@ -8,6 +8,7 @@ interface NavLink {
 }
 
 const Navbar: React.FC = () => {
+    const location = useLocation();
     const navLinks: NavLink[] = [
         { name: 'Home', path: '/' },
         { name: 'Hotels', path: '/rooms' },
@@ -17,6 +18,9 @@ const Navbar: React.FC = () => {
 
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isScrolled, setIsScrolled] = React.useState(false);
+    
+    // Check if we're on a page that should have the scrolled navbar style
+    const shouldUseScrolledStyle = isScrolled || location.pathname === '/rooms';
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -29,22 +33,22 @@ const Navbar: React.FC = () => {
     }, []);
 
     return (
-        <nav className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 py-4 md:py-6 ${isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
+        <nav className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 py-4 md:py-6 ${shouldUseScrolledStyle ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
             {/* Logo */}
             <Link to="/">
                 <img
                     src={assets.logo}
                     alt="logo"
-                    className={`h-9 transition-all duration-300 ${isScrolled ? 'brightness-0' : 'brightness-100'}`}
+                    className={`h-9 transition-all duration-300 ${shouldUseScrolledStyle ? 'brightness-0' : 'brightness-100'}`}
                 />
             </Link>
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-4 lg:gap-8">
                 {navLinks.map((link, i) => (
-                    <Link key={i} to={link.path} className={`group flex flex-col gap-0.5 transition-colors duration-300 ${isScrolled ? 'text-black' : 'text-white'}`}>
+                    <Link key={i} to={link.path} className={`group flex flex-col gap-0.5 transition-colors duration-300 ${shouldUseScrolledStyle ? 'text-black' : 'text-white'}`}>
                         {link.name}
-                        <div className={`h-0.5 w-0 group-hover:w-full transition-all duration-300 ${isScrolled ? 'bg-black' : 'bg-white'}`} />
+                        <div className={`h-0.5 w-0 group-hover:w-full transition-all duration-300 ${shouldUseScrolledStyle ? 'bg-black' : 'bg-white'}`} />
                     </Link>
                 ))}
             </div>
@@ -54,7 +58,7 @@ const Navbar: React.FC = () => {
                 <img 
                     alt="search" 
                     className="h-7 transition-all duration-500" 
-                    src={isScrolled ? 
+                    src={shouldUseScrolledStyle ? 
                         "data:image/svg+xml,%3csvg%20width='26'%20height='26'%20viewBox='0%200%2026%2026'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M16.114%2016.1133L20.0001%2019.9999'%20stroke='black'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M14.531%2017.183C17.0779%2016.1006%2018.265%2013.1585%2017.1827%2010.6117C16.1003%208.06491%2013.1582%206.87774%2010.6114%207.96011C8.06461%209.04249%206.87744%2011.9845%207.95981%2014.5313C9.04218%2017.0782%2011.9842%2018.2653%2014.531%2017.183Z'%20stroke='black'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
                         :
                         "data:image/svg+xml,%3csvg%20width='26'%20height='26'%20viewBox='0%200%2026%2026'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M16.114%2016.1133L20.0001%2019.9999'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M14.531%2017.183C17.0779%2016.1006%2018.265%2013.1585%2017.1827%2010.6117C16.1003%208.06491%2013.1582%206.87774%2010.6114%207.96011C8.06461%209.04249%206.87744%2011.9845%207.95981%2014.5313C9.04218%2017.0782%2011.9842%2018.2653%2014.531%2017.183Z'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
@@ -71,7 +75,7 @@ const Navbar: React.FC = () => {
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     alt="" 
                     className="h-4 cursor-pointer" 
-                    src={isScrolled ? 
+                    src={shouldUseScrolledStyle ? 
                         "data:image/svg+xml,%3csvg%20width='21'%20height='15'%20viewBox='0%200%2021%2015'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3crect%20width='21'%20height='1.5'%20rx='0.75'%20fill='black'/%3e%3crect%20x='8'%20y='6'%20width='13'%20height='1.5'%20rx='0.75'%20fill='black'/%3e%3crect%20x='6'%20y='13'%20width='15'%20height='1.5'%20rx='0.75'%20fill='black'/%3e%3c/svg%3e"
                         :
                         "data:image/svg+xml,%3csvg%20width='21'%20height='15'%20viewBox='0%200%2021%2015'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3crect%20width='21'%20height='1.5'%20rx='0.75'%20fill='white'/%3e%3crect%20x='8'%20y='6'%20width='13'%20height='1.5'%20rx='0.75'%20fill='white'/%3e%3crect%20x='6'%20y='13'%20width='15'%20height='1.5'%20rx='0.75'%20fill='white'/%3e%3c/svg%3e"
