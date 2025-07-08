@@ -74,6 +74,10 @@ interface Assets {
     totalBookingIcon: string;
     totalRevenueIcon: string;
     heroImage: string;
+    roomImg1: string;
+    roomImg2: string;
+    roomImg3: string;
+    roomImg4: string;
 }
 
 interface ExclusiveOffer {
@@ -198,6 +202,10 @@ export const assets: Assets = {
     totalBookingIcon,
     totalRevenueIcon,
     heroImage,
+    roomImg1,
+    roomImg2,
+    roomImg3,
+    roomImg4,
 }
 
 export const cities: string[] = [

@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import './App.css'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
+import Footer from './components/Footer'
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
     <div>
       {!isOwnerPath && <Navbar />}
       <Home />
+      <Footer />
     </div>
   )
 }
