@@ -1,13 +1,16 @@
+import { useLocation } from 'react-router-dom';
 import './App.css'
 import Navbar from './components/Navbar'
+import Home from './pages/Home'
+
 
 function App() {
+  const isOwnerPath = useLocation().pathname.includes('/owner');
+
   return (
     <div>
-      <Navbar />
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
+      {!isOwnerPath && <Navbar />}
+      <Home />
     </div>
   )
 }

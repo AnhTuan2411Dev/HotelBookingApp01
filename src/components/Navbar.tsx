@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { assets } from '../assets/assets';
 
 interface NavLink {
     name: string;
@@ -8,107 +10,96 @@ interface NavLink {
 const Navbar: React.FC = () => {
     const navLinks: NavLink[] = [
         { name: 'Home', path: '/' },
-        { name: 'Products', path: '/' },
-        { name: 'Contact', path: '/' },
+        { name: 'Hotels', path: '/rooms' },
+        { name: 'Experience', path: '/' },
         { name: 'About', path: '/' },
     ];
 
-    const ref = React.useRef<HTMLDivElement>(null);
-
-    const [isScrolled, setIsScrolled] = React.useState(false);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [isScrolled, setIsScrolled] = React.useState(false);
 
     React.useEffect(() => {
         const handleScroll = () => {
-            if (ref.current) {
-                setIsScrolled(ref.current.scrollTop > 10);
-            }
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            setIsScrolled(scrollTop > 50);
         };
-        
-        const currentRef = ref.current;
-        if (currentRef) {
-            currentRef.addEventListener("scroll", handleScroll);
-        }
-        
-        return () => {
-            if (currentRef) {
-                currentRef.removeEventListener("scroll", handleScroll);
-            }
-        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
-        <div ref={ref} className="h-88 md:h-64 overflow-y-scroll">
-            <p className="w-10 h-[500px]"></p>
-            <nav className={`fixed top-0 left-0 bg-indigo-500 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 ${isScrolled ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-lg py-3 md:py-4" : "py-4 md:py-6"}`}>
+        <nav className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 py-4 md:py-6 ${isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
+            {/* Logo */}
+            <Link to="/">
+                <img
+                    src={assets.logo}
+                    alt="logo"
+                    className={`h-9 transition-all duration-300 ${isScrolled ? 'brightness-0' : 'brightness-100'}`}
+                />
+            </Link>
 
-                {/* Logo */}
-                <a href="/" className="flex items-center gap-2">
+            {/* Desktop Nav */}
+            <div className="hidden md:flex items-center gap-4 lg:gap-8">
+                {navLinks.map((link, i) => (
+                    <Link key={i} to={link.path} className={`group flex flex-col gap-0.5 transition-colors duration-300 ${isScrolled ? 'text-black' : 'text-white'}`}>
+                        {link.name}
+                        <div className={`h-0.5 w-0 group-hover:w-full transition-all duration-300 ${isScrolled ? 'bg-black' : 'bg-white'}`} />
+                    </Link>
+                ))}
+            </div>
+
+            {/* Desktop Right */}
+            <div className="hidden md:flex items-center gap-4">
+                <img 
+                    alt="search" 
+                    className="h-7 transition-all duration-500" 
+                    src={isScrolled ? 
+                        "data:image/svg+xml,%3csvg%20width='26'%20height='26'%20viewBox='0%200%2026%2026'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M16.114%2016.1133L20.0001%2019.9999'%20stroke='black'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M14.531%2017.183C17.0779%2016.1006%2018.265%2013.1585%2017.1827%2010.6117C16.1003%208.06491%2013.1582%206.87774%2010.6114%207.96011C8.06461%209.04249%206.87744%2011.9845%207.95981%2014.5313C9.04218%2017.0782%2011.9842%2018.2653%2014.531%2017.183Z'%20stroke='black'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                        :
+                        "data:image/svg+xml,%3csvg%20width='26'%20height='26'%20viewBox='0%200%2026%2026'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M16.114%2016.1133L20.0001%2019.9999'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M14.531%2017.183C17.0779%2016.1006%2018.265%2013.1585%2017.1827%2010.6117C16.1003%208.06491%2013.1582%206.87774%2010.6114%207.96011C8.06461%209.04249%206.87744%2011.9845%207.95981%2014.5313C9.04218%2017.0782%2011.9842%2018.2653%2014.531%2017.183Z'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                    }
+                />
+                <button className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500 cursor-pointer">
+                    Login
+                </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="flex items-center gap-3 md:hidden">
+                <img 
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    alt="" 
+                    className="h-4 cursor-pointer" 
+                    src={isScrolled ? 
+                        "data:image/svg+xml,%3csvg%20width='21'%20height='15'%20viewBox='0%200%2021%2015'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3crect%20width='21'%20height='1.5'%20rx='0.75'%20fill='black'/%3e%3crect%20x='8'%20y='6'%20width='13'%20height='1.5'%20rx='0.75'%20fill='black'/%3e%3crect%20x='6'%20y='13'%20width='15'%20height='1.5'%20rx='0.75'%20fill='black'/%3e%3c/svg%3e"
+                        :
+                        "data:image/svg+xml,%3csvg%20width='21'%20height='15'%20viewBox='0%200%2021%2015'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3crect%20width='21'%20height='1.5'%20rx='0.75'%20fill='white'/%3e%3crect%20x='8'%20y='6'%20width='13'%20height='1.5'%20rx='0.75'%20fill='white'/%3e%3crect%20x='6'%20y='13'%20width='15'%20height='1.5'%20rx='0.75'%20fill='white'/%3e%3c/svg%3e"
+                    }
+                />
+            </div>
+
+            {/* Mobile Menu */}
+            <div className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+                <button className="absolute top-4 right-4" onClick={() => setIsMenuOpen(false)}>
                     <img 
-                        src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/dummyLogo/dummyLogoWhite.svg" 
-                        alt="logo" 
-                        className={`h-9 ${isScrolled && "invert opacity-80"}`} 
+                        alt="close-menu" 
+                        className="h-6.5" 
+                        src="data:image/svg+xml,%3csvg%20width='26'%20height='26'%20viewBox='0%200%2026%2026'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='m19.5%206.5-13%2013m0-13%2013%2013'%20stroke='%23000'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
                     />
-                </a>
+                </button>
 
-                {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-4 lg:gap-8">
-                    {navLinks.map((link, i) => (
-                        <a key={i} href={link.path} className={`group flex flex-col gap-0.5 ${isScrolled ? "text-gray-700" : "text-white"}`}>
-                            {link.name}
-                            <div className={`${isScrolled ? "bg-gray-700" : "bg-white"} h-0.5 w-0 group-hover:w-full transition-all duration-300`} />
-                        </a>
-                    ))}
-                    <button className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`}>
-                        New Launch
-                    </button>
-                </div>
+                {navLinks.map((link, i) => (
+                    <Link key={i} to={link.path} onClick={() => setIsMenuOpen(false)}>
+                        {link.name}
+                    </Link>
+                ))}
 
-                {/* Desktop Right */}
-                <div className="hidden md:flex items-center gap-4">
-                    <svg className={`h-6 w-6 text-white ${isScrolled ? "invert" : ""}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                    </svg>
-                    <button className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500">
-                        Login
-                    </button>
-                </div>
-
-                {/* Mobile Menu Button */}
-                <div className="flex items-center gap-3 md:hidden">
-                    <svg onClick={() => setIsMenuOpen(!isMenuOpen)} className={`h-6 w-6 cursor-pointer ${isScrolled ? "invert" : ""}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <line x1="4" y1="6" x2="20" y2="6" />
-                        <line x1="4" y1="12" x2="20" y2="12" />
-                        <line x1="4" y1="18" x2="20" y2="18" />
-                    </svg>
-                </div>
-
-                {/* Mobile Menu */}
-                <div className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-                    <button className="absolute top-4 right-4" onClick={() => setIsMenuOpen(false)}>
-                        <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <line x1="18" y1="6" x2="6" y2="18" />
-                            <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
-                    </button>
-
-                    {navLinks.map((link, i) => (
-                        <a key={i} href={link.path} onClick={() => setIsMenuOpen(false)}>
-                            {link.name}
-                        </a>
-                    ))}
-
-                    <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
-                        New Launch
-                    </button>
-
-                    <button className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500">
-                        Login
-                    </button>
-                </div>
-            </nav>
-        </div>
+                <button className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500">
+                    Login
+                </button>
+            </div>
+        </nav>
     );
 };
 
