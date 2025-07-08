@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
 
 interface HotelCardProps {
@@ -20,6 +21,14 @@ const HotelCard: React.FC<HotelCardProps> = ({
   price,
   bestSeller = false
 }) => {
+  const navigate = useNavigate();
+
+  const handleBookNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/rooms/${id}`);
+  };
+
   return (
     <a 
       className="relative max-w-70 w-full rounded-xl overflow-hidden bg-white text-gray-500/90 shadow-[0px_4px_4px_rgba(0,0,0,0.05)]"
@@ -57,7 +66,10 @@ const HotelCard: React.FC<HotelCardProps> = ({
           <p>
             <span className="text-xl text-gray-800">${price}</span>/night
           </p>
-          <button className="px-4 py-2 text-sm font-medium border border-gray-300 rounded hover:bg-gray-50 transition-all cursor-pointer">
+          <button 
+            onClick={handleBookNow}
+            className="px-4 py-2 text-sm font-medium border border-gray-300 rounded hover:bg-gray-50 transition-all cursor-pointer"
+          >
             Book Now
           </button>
         </div>
