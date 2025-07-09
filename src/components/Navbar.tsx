@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
     const [isScrolled, setIsScrolled] = React.useState(false);
     
     // Check if we're on a page that should have the scrolled navbar style
-    const shouldUseScrolledStyle = isScrolled || location.pathname === '/rooms' || location.pathname.startsWith('/rooms/');
+    const shouldUseScrolledStyle = isScrolled || location.pathname === '/rooms' || location.pathname.startsWith('/rooms/') || location.pathname === '/my-bookings';
 
     React.useEffect(() => {
         const handleScroll = () => {
